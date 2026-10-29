@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Stack Items App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .name {
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>📦 Items from Database</h1>
+    <ul id="items-list">Loading items...</ul>
+
+    <script>
+        // جلب البيانات من الـ Backend API
+        fetch('http://localhost:5000/api/items')
+            .then(response => response.json())
+            .then(data => {
+                const listElement = document.getElementById('items-list');
+                listElement.innerHTML = ''; // تفريغ كلمة Loading
+
+                if (data.length === 0) {
+                    listElement.innerHTML = '<li>No items found.</li>';
+                    return;
+                }
+
+                data.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span class="name">${item.name}</span>: ${item.description}`;
+                    listElement.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('items-list').innerHTML = '<li style="color: red;">Error loading items from server.</li>';
+            });
+    </script>
+
+</body>
+
+</html>
